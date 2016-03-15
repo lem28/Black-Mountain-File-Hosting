@@ -38,7 +38,7 @@
 			list-style: none;
 		}
 
-		div.main,div.column {
+		div.main,div.column_l,div.column_r {
 			background: rgba(30,30,30,0.75) no-repeat bottom;
 			font-size: small;
 			margin-left: .5%;
@@ -47,24 +47,16 @@
 			width: fit-content;
 		}
 
-		div.column {
+		div.column_l {
 			float: left;
+		}
+
+		div.column_r {
+			float: right;
 		}
 		
 		#clock {
 			float: right;
-		}
-		
-		#radioframe {
-			frame: none;
-			margin-height: 0;
-			margin-width: 0;
-		}
-		
-		#radio {
-			padding: 5px;
-			width:75%;
-			height:75%;
 		}
 	</style>
 	<script>
@@ -104,154 +96,35 @@
 	</script>
 </head>
 <body onload="date(); startTime()">
-	<div class="main" id="clock">
+	<div class="column_r" id="clock">
 		<div id="date"></div>
 		<div id="time"></div>
 	</div>
-	<div class="main" id="radio">
-		<iframe id="radioframe" src="https://jetsetradio.live"></iframe>
-	</div>
-	<div id="links">
-		<div class="column">
-			<ul>
-				<li>
-					<a href="https://www.facebook.com">facebook</a>
-				</li>
-				<li>
-					<a href="https://www.twitter.com">twitter</a>
-				</li>
-				<li>
-					<a href="https://www.youtube.com">youtube</a>
-				</li>
-				<li>
-					<a href="https://mightytext.net/web">mightytext</a>
-				</li>
-				<li>
-					<a href="https://mail.google.com">gmail</a>
-				</li>
-				<li>
-					<a href="https://www.hotmail.com">hotmail / outlook</a>
-				</li>
-				<li>
-					<a href="https://drive.google.com/#my-drive">google drive</a>
-				</li>
-				<li>
-					<a href="https://mega.co.nz/#fm/eEURzQiJ">mega</a>
-				</li>
-				<li>
-					<a href="https://www.amazon.com">amazon</a>
-				</li>
-				<li>
-					<a href="https://www.ebay.com">ebay</a>
-				</li>
-				<li>
-					<a href="https://www.microcenter.com">microcenter</a>
-				</li>
-				<li>
-					<a href="https://www.newegg.com">newegg</a>
-				</li>
-				<li>
-					<a href="https://store.richspsxparts.com">richs psx parts</a>
-				</li>
-			</ul>
+	<div class="main" style="background-color: rgba(0,0,0,0.0); text-align: right;">
+		<div class="column_l" name="box.register">
+			<div>
+				<form action="php/rpc.php" method="post" >
+				<p>username: <input type="text" name="username" /></p>
+				<p>password: <input type ="password" name="password" /></p>
+				<p>first name: <input type ="text" name="first_name" /></p>
+				<p>last name: <input type ="text" name="last_name" /></p>
+				<p>email: <input type ="text" name="user_email" /></p>
+				<div style="text-align: left;">
+					<input type="submit" name="request" value="register"/>
+				</div>
+				</form>
+			</div>
 		</div>
-		<div class="column">
-			<ul>
-				<li>
-					<a href="https://www.adultswim.com/videos/streams">adult swim streams</a>
-				</li>
-				<li>
-					<a href="https://www.cc.com">comedy central</a>
-				</li>
-				<li>
-					<a href="https://www.saltybet.com">salty bet</a>
-				</li>
-				<li>
-					<a href="https://www.allsp.ch">south park</a>
-				</li>
-				<li>
-					<a href="https://www.humblebundle.com/home">hb - profile</a>
-				</li>
-				<li>
-					<a href="https://store.steampowered.com">steam</a>
-				</li>
-				<li>
-					<a href="https://steamcommunity.com/my">steam community</a>
-				</li>
-				<li>
-					<a href="https://masseffect.wikia.com/wiki/Mass_Effect_Wiki">mass effect wiki</a>
-				</li>
-				<li>
-					<a href="https://www.pcgamingwiki.com/wiki/home">pcgw</a>
-				</li>
-				<li>
-					<a href="https://warframe.wikia.com/wiki/WARFRAME_Wiki">warframe wiki</a>
-				</li>
-				<li>
-					<a href="https://www.emucr.com">emucr</a>
-				</li>
-				<li>
-					<a href="https://www.emuparadise.me">emuparadise</a>
-				</li>
-			</ul>
-		</div>
-		<div class="column">
-			<ul>
-				<li>
-					<a href="https://www.codecademy.com">codecademy</a>
-				</li>
-				<li>
-					<a href="https://www.dirtymarkup.com">dirty markup</a>
-				</li>
-				<li>
-					<a href="https://www.greasyfork.org">greasyfork</a>
-				</li>
-				<li>
-					<a href="https://www.khanacademy.org">khan academy</a>
-				</li>
-				<li>
-					<a href="https://www.stackoverflow.com">stackoverflow</a>
-				</li>
-				<li>
-					<a href="https://www.mathway.com">mathway</a>
-				</li>
-				<li>
-					<a href="https://www.wolframalpha.com">wolframalpha</a>
-				</li>
-				<li>
-					<a href="https://app.reef-education.com">i-clicker</a>
-				</li>
-				<li>
-					<a href="https://lms.itskills.us">lit institute of technology</a>
-				</li>
-				<li>
-					<a href="https://www.pearsonmylabandmastering.com/northamerica">mylab</a>
-				</li>
-				<li>
-					<a href="https://moodle.njit.edu">njit moodle</a>
-				</li>
-				<li>
-					<a href="https://my.njit.edu">njit pipeline</a>
-				</li>
-				<li>
-					<a href="https://www.njit.xyz">njit schedule creator</a>
-				</li>
-				<li>
-					<a href="https://www.gpuboss.com">gpuboss</a>
-				</li>
-				<li>
-					<a href="https://www.guru3d.com">guru3d</a>
-				</li>
-				<li>
-					<a href="https://www.howtogeek.com">how to geek</a>
-				</li>
-				<li>
-					<a href="https://www.lifehacker.com">lifehacker</a>
-				</li>
-				<li>
-					<a href="https://www.maximumpc.com">maximum pc</a>
-				</li>
-			</ul>
+		<div class="column_l" name="box.login">
+			<div>
+				<form action="php/rpc.php" method="post" >
+				<p>username: <input type="text" name="username" /></p>
+				<p>password: <input type ="password" name="password" /></p>
+				<div style="text-align: left;">
+					<input type="submit" name="request" value="login"/>
+				</div>				
+				</form>
+			</div>
 		</div>
 	</div>
 </body>

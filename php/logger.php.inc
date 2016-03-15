@@ -1,7 +1,7 @@
 <?php
 class error_logger
 {
-	public function __construct($output_file = "var/log/php.log")
+	public function __construct($output_file)
 	{
 		$this->fp = fopen($output_file,"a");
 	}
