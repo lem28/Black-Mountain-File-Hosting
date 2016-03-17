@@ -52,6 +52,7 @@
 		}
 
 		div.column_r {
+			margin-right: .5%;
 			float: right;
 		}
 		
@@ -60,11 +61,14 @@
 		}
 	</style>
 	<script>
-		function makeArray() {
-			for (i = 0; i < makeArray.arguments.length; i++) this[i + 1] = makeArray.arguments[i];
+		function makeArray()
+		{
+			for (i = 0; i < makeArray.arguments.length; i++)
+				this[i + 1] = makeArray.arguments[i];
 		}
 
-		function date() {
+		function date()
+		{
 			var months = new makeArray('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december');
 			var date = new Date();
 			var day = date.getDate();
@@ -74,7 +78,8 @@
 			document.getElementById('date').innerHTML = months[month] + " " + day + ", " + year + "<br />";
 		}
 
-		function startTime() {
+		function startTime()
+		{
 			var today = new Date();
 			var h = today.getHours();
 			var m = today.getMinutes();
@@ -87,10 +92,11 @@
 			}, 500);
 		}
 
-		function checkTime(i) {
+		function checkTime(i)
+		{
 			if (i < 10) {
-				i = "0" + i
-			};
+				i = "0" + i;
+			}
 			return i;
 		}
 	</script>
@@ -103,12 +109,12 @@
 	<div class="main" style="background-color: rgba(0,0,0,0.0); text-align: right;">
 		<div class="column_l" name="box.register">
 			<div>
-				<form action="php/rpc.php" method="post" >
-				<p>username: <input type="text" name="username" /></p>
-				<p>password: <input type ="password" name="password" /></p>
-				<p>first name: <input type ="text" name="first_name" /></p>
-				<p>last name: <input type ="text" name="last_name" /></p>
-				<p>email: <input type ="text" name="user_email" /></p>
+				<form action="php/rpc.php" method="post">
+				<p>username: <input type="text" name="username"/>
+				<p>password: <input type ="password" name="password"/>
+				<p>first name: <input type ="text" name="first_name"/>
+				<p>last name: <input type ="text" name="last_name"/>
+				<p>email: <input type ="text" name="user_email"/>
 				<div style="text-align: left;">
 					<input type="submit" name="request" value="register"/>
 				</div>
@@ -117,12 +123,22 @@
 		</div>
 		<div class="column_l" name="box.login">
 			<div>
-				<form action="php/rpc.php" method="post" >
-				<p>username: <input type="text" name="username" /></p>
-				<p>password: <input type ="password" name="password" /></p>
+				<form action="php/rpc.php" method="post">
+				<p>username: <input type="text" name="username"/>
+				<p>password: <input type ="password" name="password"/>
 				<div style="text-align: left;">
 					<input type="submit" name="request" value="login"/>
 				</div>				
+				</form>
+			</div>
+		</div>
+		<div class="column_l" name="box.upload">
+			<div>
+				<form action="php/upload.php" method="post" enctype="multipart/form-data"> 
+				Upload File: <input type="file" name="fileup"/>
+				<div style="text-align: left;">
+					<input type="submit" name='submit' value="Upload"/>
+				</div>
 				</form>
 			</div>
 		</div>

@@ -1,22 +1,23 @@
 #!usr/bin/php
 <?php
-require_once(logger.php.inc);
+require_once("logger.php.inc");
 
 class user_db
 {
 	private $db;
 	private $salt;
+	private $logger;
 	public function __construct($ini_file)
 		{
 		$ini = parse_ini_file($ini_file,true);
-		$logger = new error_logger("var/www/log/it202.log");
+		$logger = new error_logger("var/www/log/users.log");
 		$this->db = new mysqli(
 			$ini["login_db"]["host"],
 			$ini["login_db"]["user"],
 			$ini["login_db"]["password"],
 			$ini["login_db"]["db"]
 		);
-
+		$this->salt = $ini['user_db']['salt'];
 		if ($this->db->connect_errno > 0)
 		{
 			$this->logger->log(__file__.__line__."Failed to connect to database".$this->db->connect_error);
@@ -72,6 +73,10 @@ class user_db
 		if ($this->get_login_name($login_name) != 0)
 		{
 			$this->logger->log("user $login_name already exists");
+			$response = array(
+			"message"=>"file $filename already exists!",
+			"success"=>false
+			);
 			return false;
 		}
         $now = date("Y-m-d h:i:s",time());
@@ -85,7 +90,8 @@ class user_db
 				user_first_name,
 				user_last_name,
 				user_email,
-
+				first_login,
+				last_login
 			)
 			VALUES
 			(
@@ -94,6 +100,8 @@ class user_db
 				'$first_name',
 				'$last_name',
 				'$email',
+				'$now',
+				'$now'
 			);";
 		$add_results = $this->db->query($add_query);
 		if(!$results)

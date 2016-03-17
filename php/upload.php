@@ -1,54 +1,35 @@
 <?php
-class file
-{
-	function upload
-	{
-		$target_dir = "uploads/";
-		$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-		$uploadOk = 1;
-		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
-		// Check if image file is a actual image or fake image
-		if(isset($_POST["submit"])) {
-			$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-			if($check !== false) {
-				echo "File is an image - " . $check["mime"] . ".";
-				$uploadOk = 1;
-			} else {
-				echo "File is not an image.";
-				$uploadOk = 0;
-			}
+require_once("file_db.php");
+
+$uploadpath = 'upload/';									// directory to store the uploaded files
+$max_size = 10;												// maximum file size, in KiloBytes
+$alwidth = 10000;											// maximum allowed width, in pixels
+$alheight = 10000;											// maximum allowed height, in pixels
+$allowtype = array('bmp', 'gif', 'jpg', 'jpeg', 'png');		// allowed extensions
+
+if(isset($_FILES['fileup']) && strlen($_FILES['fileup']['name']) > 1) {
+	$uploadpath = $uploadpath . basename( $_FILES['fileup']['name']);// gets the file name
+	$sepext = explode('.', strtolower($_FILES['fileup']['name']));
+	$type = end($sepext);// gets extension
+	list($width, $height) = getimagesize($_FILES['fileup']['tmp_name']);// gets image width and height
+	$err = '';// to store the errors
+
+	// Checks if the file has allowed type, size, width and height (for images)
+	if(!in_array($type, $allowtype)) $err .= 'The file: <b>'. $_FILES['fileup']['name']. '</b> not has the allowed extension type.';
+	if($_FILES['fileup']['size'] > $max_size*1000000) $err .= '<br/>Maximum file size must be: '. $max_size. ' MB.';
+	if(isset($width) && isset($height) && ($width >= $alwidth || $height >= $alheight)) $err .= '<br/>The maximum Width x Height must be: '. $alwidth. ' x '. $alheight;
+
+	// If no errors, upload the image, else, output the errors
+	if($err == '') {
+		if(move_uploaded_file($_FILES['fileup']['tmp_name'], $uploadpath)) { 
+			echo 'File: <b>'. basename( $_FILES['fileup']['name']). '</b> successfully uploaded:';
+			echo '<br/>File type: <b>'. $_FILES['fileup']['type'] .'</b>';
+			echo '<br />Size: <b>'. number_format($_FILES['fileup']['size']/1024, 3, '.', '') .'</b> KB';
+			if(isset($width) && isset($height)) echo '<br/>Image Width x Height: '. $width. ' x '. $height;
+			echo '<br/><br/>Image address: <b>http://'.$_SERVER['HTTP_HOST'].rtrim(dirname($_SERVER['REQUEST_URI']), '\\/').'/'.$uploadpath.'</b>';
 		}
-		// Check if file already exists
-		if (file_exists($target_file)) {
-			echo "Sorry, file already exists.";
-			$uploadOk = 0;
-		}
-		// Check file size
-		if ($_FILES["fileToUpload"]["size"] > 500000) {
-			echo "Sorry, your file is too large.";
-			$uploadOk = 0;
-		}
-		// Allow certain file formats
-		if(
-			$imageFileType != "jpg" &&
-			$imageFileType != "png" &&
-			$imageFileType != "jpeg" &&
-			$imageFileType != "gif"
-		) {
-			echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-			$uploadOk = 0;
-		}
-		// Check if $uploadOk is set to 0 by an error
-		if ($uploadOk == 0) {
-			echo "Sorry, your file was not uploaded.";
-		// if everything is ok, try to upload file
-		} else {
-			if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-				echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-			} else {
-				echo "Sorry, there was an error uploading your file.";
-			}
-		}
+		else echo '<b>Unable to upload the file.</b>';
 	}
+	else echo $err;
 }
 ?>
