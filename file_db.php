@@ -7,16 +7,22 @@ $command = $argv[1];
 switch($command)
 {
 	case 'upload':
-		$db = new user_db("../ini/connect.ini");
-		$db->add_new_user($login_name,$password,$first_name,$last_name,$email);
+		$db = new file_db("../ini/connect.ini");
+		$db->upload($file,$expiration);
+		break;
+	case 'search':
+		$db = new file_db("../ini/connect.ini");
+		$db->search($param);
+		break;
+	case 'browse':
+		$db = new file_db("../ini/connect.ini");
+		$db->browse();
 		break;
 	case 'login':
-		$db = new user_db("../ini/connect.ini");
-	case 'login':
-		$db = new user_db("../ini/connect.ini");
-	case 'login':
-		$db = new user_db("../ini/connect.ini");
+		$db = new file_db("../ini/connect.ini");
+		$db->file($file,$expiration);
+		break;
 	default:
-		echo "usage:\n".$argv[0]."register <login name> <password> <first name> <last name> <email> | login <login name> <password>".PHP_EOL;
+		echo "usage:\n".$argv[0]."upload <file> <expiration> | search <param> | browse".PHP_EOL;
 }
 ?>
