@@ -1,5 +1,5 @@
 <?php
-require_once("user_db.php.inc");
+require_once("includes/user_db.php.inc");
 
 $request = $_POST['request'];
 $response = "FUCK<p>";

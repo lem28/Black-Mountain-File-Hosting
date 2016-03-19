@@ -1,6 +1,6 @@
 #!usr/bin/php
 <?php
-require_once("user_db.php.inc");
+require_once("includes/user_db.php.inc");
 
 $command = $argv[1];
 

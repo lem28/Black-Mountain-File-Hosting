@@ -1,4 +1,3 @@
-#!usr/bin/php
 <?php
 require_once("logger.php.inc");
 
@@ -12,12 +11,12 @@ class user_db
 		$ini = parse_ini_file($ini_file,true);
 		$logger = new error_logger("var/www/log/users.log");
 		$this->db = new mysqli(
-			$ini["login_db"]["host"],
-			$ini["login_db"]["user"],
-			$ini["login_db"]["password"],
-			$ini["login_db"]["db"]
+			$ini["db"]["host"],
+			$ini["db"]["user"],
+			$ini["db"]["password"],
+			$ini["db"]["db"]
 		);
-		$this->salt = $ini['user_db']['salt'];
+		$this->salt = $ini['db']['salt'];
 		if ($this->db->connect_errno > 0)
 		{
 			$this->logger->log(__file__.__line__."Failed to connect to database".$this->db->connect_error);
@@ -30,7 +29,6 @@ class user_db
 		$this->db->close();
 		echo "Closed connection to db".PHP_EOL;
 	}
-
 	public function get_login_name($login_name)
 	{
 		$get_query = "select login_name from users where login_name='$login_name';";
@@ -47,12 +45,10 @@ class user_db
 		}
 		return 0;
 	}
-
 	private function salt_password($password)
 	{
 		return $this->db->real_escape_string(sha1($password.$this->salt));
 	}
-
 	public function validate_user($login_name,$password)
 	{
 		if ($this->get_login_name($login_name) == 0)

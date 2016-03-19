@@ -4,19 +4,18 @@ require_once("logger.php.inc");
 class file_db
 {
 	private $db;
-	private $salt;
 	private $logger;
 	public function __construct($ini_file)
 		{
 		$ini = parse_ini_file($ini_file,true);
 		$logger = new error_logger("var/www/log/files.log");
 		$this->db = new mysqli(
-			$ini["user_db"]["host"],
-			$ini["user_db"]["user"],
-			$ini["user_db"]["password"],
-			$ini["user_db"]["db"]
+			$ini["db"]["host"],
+			$ini["db"]["user"],
+			$ini["db"]["password"],
+			$ini["db"]["db"]
 		);
-		$this->salt = $ini['user_db']['salt'];
+		$this->salt = $ini['db']['salt'];
 		if ($this->db->connect_errno > 0)
 		{
 			$this->logger->log(__file__.__line__."Failed to connect to database".$this->db->connect_error);
@@ -24,13 +23,11 @@ class file_db
 		}
 		echo "Connected to db".PHP_EOL;
 	}
-
 	public function __destruct()
 	{
 		$this->db->close();
 		echo "Closed connection to db".PHP_EOL;
 	}
-
 	public function get_file($filename)
 	{
 		$get_query = "select file_name from files where file_name='$filename';";
@@ -47,7 +44,6 @@ class file_db
 		}
 		return 0;
 	}
-
 	public function add_new_file($filename,$expiration)
 	{
 		if ($this->get_file_name($filename) != 0)
