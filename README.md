@@ -1,2 +1,3 @@
-# Black-Mountain-File-Hosting
-File hosting server
+# Black Mountain
+
+File hosting server kit
