@@ -1,5 +1,6 @@
 <?php
-require_once("includes/user_db.php.inc");
+require_once("includes/user.php.inc");
+require_once("includes/file.php.inc");
 
 $request = $_POST['request'];
 $response = "FUCK<p>";
@@ -37,7 +38,15 @@ switch($request)
 			$login->add_new_user($username,$password,$first_name,$last_name,$email);
 			$response = "$username Registered Successfully!<p>";
 		}
-		break;			
+		break;	
+	case "search":
+		$db = new file_db("../ini/connect.ini");
+		$db->search($param);
+		break;
+	case "browse":
+		$db = new file_db("../ini/connect.ini");
+		$db->browse();
+		break;		
 }
 echo $response;
 ?>
