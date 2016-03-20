@@ -1,7 +1,7 @@
 <?php
 require_once("logger.php.inc");
 
-class user_db
+class user
 {
 	private $db;
 	private $salt;
@@ -11,10 +11,10 @@ class user_db
 		$ini = parse_ini_file($ini_file,true);
 		$logger = new error_logger("var/www/log/users.log");
 		$this->db = new mysqli(
-			$ini["db"]["host"],
-			$ini["db"]["user"],
-			$ini["db"]["password"],
-			$ini["db"]["db"]
+			$ini['db']['host'],
+			$ini['db']['user'],
+			$ini['db']['password'],
+			$ini['db']['db']
 		);
 		$this->salt = $ini['db']['salt'];
 		if ($this->db->connect_errno > 0)
@@ -32,16 +32,16 @@ class user_db
 	public function get_login_name($login_name)
 	{
 		$get_query = "select login_name from users where login_name='$login_name';";
-		$get_results = $this->db->query($query);
+		$get_results = $this->db->query($get_query);
 		if(!$get_results)
 		{
 			$this->logger->log("error with results: ".$this->db->error);
 			return 0;
 		}
 		$user = $get_results->fetch_assoc();
-		if (isset($user["login_name"]))
+		if (isset($user['login_name']))
 		{	
-			return $user["login_name"];
+			return $user['login_name'];
 		}
 		return 0;
 	}
