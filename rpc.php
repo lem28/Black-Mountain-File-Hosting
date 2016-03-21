@@ -3,7 +3,7 @@ require_once("user.php.inc");
 require_once("file.php.inc");
 
 $request = $_POST['request'];
-$response = "FUCK<p>";
+$response = "didn't work :^)";
 
 switch($request)
 {
@@ -40,12 +40,21 @@ switch($request)
 		}
 		break;
 	case "upload":
-		$file = $_POST['fileup'];
+		$file_up = $_POST['fileup'];
 		$expire = $POST['expire'];
-		$db = new file("connect.ini");
-		$db->upload($param);
+		$file = new file("connect.ini");
+		$response = $file->upload($param);
+		if ($response['success'])
+		{
+			$response = "File Upload Successful!<p>";
+		}
+		else
+		{
+			$response = "File Upload Failed...<p>";
+		}
 		break;
 	case "search":
+		$param = $_POST['param'];
 		$db = new file("connect.ini");
 		$db->search($param);
 		break;

@@ -1,84 +1,95 @@
 <?php
-require_once("logger.php.inc");
 
+require_once("error.php.inc");
 class user
 {
-	private $db;
-	private $salt;
-	private $logger;
-	public function __construct($ini_file)
-		{
-		$ini = parse_ini_file($ini_file,true);
-		$logger = new error_logger("var/www/log/users.log");
-		$this->db = new mysqli(
-			$ini['db']['host'],
-			$ini['db']['user'],
-			$ini['db']['password'],
-			$ini['db']['db']
-		);
-		$this->salt = $ini['db']['salt'];
-		if ($this->db->connect_errno > 0)
-		{
-			$this->logger->log(__file__.__line__."Failed to connect to database".$this->db->connect_error);
-			exit(0);
-		}
-		echo "Connected to db".PHP_EOL;
-	}
-	public function __destruct()
-	{
-		$this->db->close();
-		echo "Closed connection to db".PHP_EOL;
-	}
-	public function get_login_name($login_name)
-	{
-		$get_query = "select login_name from users where login_name='$login_name';";
-		$get_results = $this->db->query($get_query);
-		if(!$get_results)
-		{
-			$this->logger->log("error with results: ".$this->db->error);
-			return 0;
-		}
-		$user = $get_results->fetch_assoc();
-		if (isset($user['login_name']))
-		{	
-			return $user['login_name'];
-		}
-		return 0;
-	}
-	private function salt_password($password)
-	{
-		return $this->db->real_escape_string(sha1($password.$this->salt));
-	}
-	public function validate_user($login_name,$password)
-	{
-		if ($this->get_login_name($login_name) == 0)
-		{
-			$this->logger->log("user $login_name doesn't exist");
-			return false;
-		}
-		$validate_query = "select login_name from users where user_name='$name';";
-		$validate_results = $this->db->query($validate_query);
-		if(!$validate_results)
-		{
-			$this->logger->log("error with results: ".$this->db->error);
-			return 0;
-		}
-	}
-	public function add_new_user($login_name,$password,$first_name,$last_name,$email)
-	{
-		if ($this->get_login_name($login_name) != 0)
-		{
-			$this->logger->log("user $login_name already exists");
-			$response = array(
-			"message"=>"file $filename already exists!",
-			"success"=>false
-			);
-			return false;
-		}
-        $now = date("Y-m-d h:i:s",time());
-		$name = $this->db->real_escape_string($name);
-		$password = $this->salt_password($password);
-		$add_query = "
+    private $db;
+    private $salt;
+    private $logger;
+    public function __construct($iniFile)
+    {
+        $ini          = parse_ini_file($iniFile, true);
+        $this->logger = new error_logger("logs/users.log");
+        $this->db     = new mysqli(
+			$ini['db']["host"],
+			$ini['db']["user"],
+			$ini['db']["password"],
+			$ini['db']["db"]);
+        $this->salt   = $ini['db']["salt"];
+        if ($this->db->connect_errno > 0) {
+            $this->logger->log(__FILE__ . __LINE__ . "failed to connect to database re: " . $this->db->connect_error);
+            exit(0);
+        }
+        $this->logger->log("testing");
+    }
+    public function __destruct()
+    {
+        $this->db->close();
+    }
+    
+    public function get_user_login($name)
+    {
+        $query   = "select user_login from users where user_login = '$name';";
+        $results = $this->db->query($query);
+        if (!$results) {
+            $this->logger->log("error with results: " . $this->db->error);
+            return 0;
+        }
+        $client = $results->fetch_assoc();
+        if (isset($client['user_login'])) {
+            return $client['user_login'];
+        }
+        return 0;
+    }
+    
+    private function salt_password($password)
+    {
+        return $this->db->real_escape_string(sha1($password . $this->salt));
+    }
+    
+    public function validate_user($name, $password)
+    {
+        if ($this->get_user_login($name) == 0) {
+            return array(
+                "success" => false,
+                "message" => "user does not exist"
+            );
+        }
+        $query   = "select * from users where login_name='$name';";
+        $results = $this->db->query($query);
+        if (!$results) {
+            return array(
+                "success" => false,
+                "message" => "db failure"
+            );
+        }
+        $user = $results->fetch_assoc(); {
+            if ($user['user_pw'] == $this->salt_password($password)) {
+                return array(
+                    "success" => true
+                );
+            }
+        }
+        return array(
+            "success" => false,
+            "message" => "failed to match password"
+        );
+    }
+    
+    public function add_new_user($name, $password, $first_name, $last_name, $email)
+    {
+        if ($this->get_user_login($name) != 0) {
+            $this->logger->log("user $name already exists!!!!!");
+            $response = array(
+                "message" => "user $name already exists!",
+                "success" => false
+            );
+            return $response;
+        }
+        $now      = date("Y-m-d h:i:s", time());
+        $name     = $this->db->real_escape_string($name);
+        $password = $this->salt_password($password);
+        $add_query = "
 			INSERT INTO users
 			(
 				user_login,
@@ -99,16 +110,14 @@ class user
 				'$now',
 				'$now'
 			);";
-		$add_results = $this->db->query($add_query);
-		if(!$results)
-		{
-			$this->logger->log("error with results: ".$this->db->error);
-		}
-		else
-		{
-			echo "Added $login_name".PHP_EOL;
-		}
-		return 0;
-	}
+        $results  = $this->db->query($add_query);
+        if (!$results) {
+            $this->logger->log("error: " . $this->db->error);
+        }
+        return array(
+            "success" => true
+        );
+    }
+    
 }
 ?>

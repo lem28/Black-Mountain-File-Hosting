@@ -5,7 +5,7 @@ class error_logger
 	{
 		$this->fp = fopen($output_file,"a");
 	}
-	public function log()
+	public function log($message)
 	{
 		fwrite($this->fp,$message.PHP_EOL);
 	}
