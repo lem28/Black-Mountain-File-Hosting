@@ -43,7 +43,7 @@ switch($request)
 		$file_up = $_POST['fileup'];
 		$expire = $POST['expire'];
 		$file = new file("connect.ini");
-		$response = $file->upload($param);
+		$response = $file->file_upload($param);
 		if ($response['success'])
 		{
 			$response = "File Upload Successful!<p>";
@@ -56,11 +56,11 @@ switch($request)
 	case "search":
 		$param = $_POST['param'];
 		$db = new file("connect.ini");
-		$db->search($param);
+		$db->file_search($param);
 		break;
 	case "browse":
 		$db = new file("connect.ini");
-		$db->browse();
+		$db->file_browse();
 		break;		
 }
 echo $response;

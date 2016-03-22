@@ -63,15 +63,17 @@
 			<div class="main" name="upload">
 				<form action="rpc.php" method="post" enctype="multipart/form-data"> 
 				<p>Upload File: <input type="file" name="fileup"/>
-				<p>Lifetime: <input type="number" name="expiration"/>
 				<div style="text-align: left;">
-					<input type="submit" name="submit" value="upload"/>
+					<p>Lifetime: <input type="number" name="expiration"/>
+				</div>
+				<div style="text-align: left;">
+					<input type="submit" name="request" value="upload"/>
 				</div>
 				</form>
 			</div>
 			<div class="main" name="search">
 				<form action="rpc.php" method="post"> 
-				<p>Search: <input type="text" name="term" />
+				<p>Search: <input type="text" name="param" />
 				<div style="text-align: left;"> 
 					<input type="submit" name="request" value="search" /> 
 				</div>				
