@@ -67,7 +67,19 @@ switch($request)
 	case "browse":
 		$file = new file("connect.ini");
 		$response = $file->file_browse();
-		break;		
+		break;
+	case "scan":
+		$file = new file("connect.ini");
+		$response = $file->file_scan();
+		if ($response['success'])
+		{
+			$response = "<p>File Scan Successful!";
+		}
+		else
+		{
+			$response = "<p>File Scan Failed...";
+		}
+		break;
 }
 echo $response;
 ?>
