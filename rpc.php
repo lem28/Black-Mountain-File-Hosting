@@ -32,35 +32,41 @@ switch($request)
 		$response = $login->validate_user($username, $password);
 		if ($response['success'])
 		{
-			$response = "Login Successful!<p>";
+			$response = "<p>Login Successful!";
 		}
 		else		
 		{
-			$response = "Login Failed...<p>";
+			$response = "<p>Login Failed...";
 		}
 		break;
 	case "upload":
-		$file_up = $_POST['fileup'];
-		$expire = $POST['expire'];
 		$file = new file("connect.ini");
-		$response = $file->file_upload($param);
+		$response = $file->file_upload();
 		if ($response['success'])
 		{
-			$response = "File Upload Successful!<p>";
+			$response = "<p>File Upload Successful!";
 		}
 		else
 		{
-			$response = "File Upload Failed...<p>";
+			$response = "<p>File Upload Failed...";
 		}
 		break;
 	case "search":
 		$param = $_POST['param'];
-		$db = new file("connect.ini");
-		$db->file_search($param);
+		$file = new file("connect.ini");
+		$response = $file->file_search($param);
+		if ($response['success'])
+		{
+			$response = "<p>File found!";
+		}
+		else
+		{
+			$response = "<p>File not found...";
+		}
 		break;
 	case "browse":
-		$db = new file("connect.ini");
-		$db->file_browse();
+		$file = new file("connect.ini");
+		$repsonse = $file->file_browse();
 		break;		
 }
 echo $response;

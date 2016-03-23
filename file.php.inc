@@ -24,64 +24,18 @@ class file
         $this->db->close();
         echo "<p>Closed connection to db" . PHP_EOL;
     }
-    public function get_file($filename)
+    public function file_upload()
     {
-        $get_query   = "select file_name from files where file_name='$filename';";
-        $get_results = $this->db->query($get_query);
-        if (!$get_results) {
-            $this->logger->log("error with results: " . $this->db->error);
-            return 0;
-        }
-        $file = $get_results->fetch_assoc();
-        if (isset($filename['file_name']))
-            return $filename['file_name'];
-        }
-        return 0;
-    }
-    public function file_upload($expiration)
-    {
-        $filename = $this->db->real_escape_string($filename);
-        if ($this->get_file($filename) != 0) {
-            $this->logger->log("file $filename already exists!!!!!");
-            $response = array(
-                "message" => "file $filename already exists!",
-                "success" => false
-            );
-            return $response;
-        }
-        $target = "uploads/";
-        $target = $target . basename($_FILES['uploaded']['name']);
-        $ok     = 1;
-        if (move_uploaded_file($_FILES['uploaded']['tmp_name'], $target)) {
-            echo "<p>The file " . basename($_FILES['uploadedfile']['name']) . " has been uploaded";
-        } else {
-            echo "<p>Sorry, there was a problem uploading your file.";
-        }
-        $now         = date("Y-m-d h:i:s", time());
-        $expiration  = strtotime("$expiration days", strtotime($now));
-        $expiration  = $expiration;
-        $add_query   = "
-            INSERT INTO files
-            (
-                file_name,
-                file_url,
-                upload_date,
-                expiration_date
-            )
-            VALUES
-            (
-                '$filename',
-                '$url',
-                '$now',
-                '$expiration'
-            );";
-        $add_results = $this->db->query($add_query);
-        if (!$add_results) {
-            $this->logger->log("error with results: " . $this->db->error);
-        } else {
-            echo "<p>Added $filename" . PHP_EOL;
-        }
-        return 0;
+        $filename = basename($_FILES['file']['name']);
+        $target = "uploads";
+		if (move_uploaded_file($_FILES['file']['tmp_name'], $target))
+		{
+			echo "<p> The file " . basename($filename) . " has been uploaded";
+		}
+		else
+		{
+			echo "<p> Sorry, there was a problem uploading your file.";
+		}
     }
     public function file_search($param)
     {
@@ -92,24 +46,16 @@ class file
     }
 	public function file_browse()
 	{
-		$dir='uploads';
-		$handle=opendir($dir); 
-		while(($file=readdir($handle))!==false) 
+		$target = "uploads";
+		$host_url = "http://127.0.0.1/";
+		foreach (new DirectoryIterator(dirname(__FILE__) . "/" . $target) as $file)
 		{
-		    if($file!=='.'&&$file!=='..') 
-		    { 
-		        echo $file . ' '; 
-		    } 
-		}		 
-		echo '<br />';
-		$list=scandir($dir);
-		foreach($list as $file) 
-		{
-		    if($file!=='.'&&$file!=='..') 
-		    {
-		        echo $file . ' '; 
-		    } 
+			if($file->isDot()) continue;
+			$file = $file->getFilename();
+			$file_url = $host_url . $target . $file;
+			echo $file_url . '<br>';
 		}
+		echo "Finished loading";
 	}
 }
 ?>
