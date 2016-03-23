@@ -90,7 +90,7 @@ class user
 		}
 		return 0;
 	}
-	public function validate_user($name, $password)
+	public function login_user($name, $password)
 	{
 		if ($this->get_user_login($name) == 0)
 		{

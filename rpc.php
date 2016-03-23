@@ -14,7 +14,7 @@ switch($request)
 		$last_name = $_POST['last_name'];
 		$email = $_POST['user_email'];
 		$login = new user("connect.ini");
-		$response = $login->validate_user($username, $password);
+		$response = $login->login_user($username, $password);
 		if ($response['success'])
 		{
 			$response = "Registration Failed:".$response['message']."<p>";			
@@ -29,7 +29,7 @@ switch($request)
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		$login = new user("connect.ini");
-		$response = $login->validate_user($username, $password);
+		$response = $login->login_user($username, $password);
 		if ($response['success'])
 		{
 			$response = "<p>Login Successful!";
@@ -57,16 +57,16 @@ switch($request)
 		$response = $file->file_search($param);
 		if ($response['success'])
 		{
-			$response = "<p>File found!";
+			$response = "<p>File Search Successful!";
 		}
 		else
 		{
-			$response = "<p>File not found...";
+			$response = "<p>File Search Failed...";
 		}
 		break;
 	case "browse":
 		$file = new file("connect.ini");
-		$repsonse = $file->file_browse();
+		$response = $file->file_browse();
 		break;		
 }
 echo $response;
