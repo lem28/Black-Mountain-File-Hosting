@@ -1,3 +1,4 @@
+create database if not exists black_mountain;
 drop table if exists users;
 drop table if exists files;
 create table users

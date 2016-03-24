@@ -1,6 +1,6 @@
 <?php
-require_once("user.php.inc");
-require_once("file.php.inc");
+require_once("inc/user.php.inc");
+require_once("inc/file.php.inc");
 
 $request = $_POST['request'];
 $response = "didn't work :^)";
@@ -13,34 +13,37 @@ switch($request)
 		$first_name = $_POST['first_name'];
 		$last_name = $_POST['last_name'];
 		$email = $_POST['user_email'];
-		$login = new user("connect.ini");
+		$login = new user("inc/connect.ini");
 		$response = $login->login_user($username, $password);
 		if ($response['success'])
 		{
-			$response = "Registration Failed:".$response['message']."<p>";			
+			$response = "<p>Registration Failed: ".$response['message'];			
 		}
 		else		
 		{
 			$login->add_new_user($username,$password,$first_name,$last_name,$email);
-			$response = "$username Registered Successfully!<p>";
+			$response = "<p> $username Registered Successfully!";
 		}
+		header("Location: index.html");
 		break;
 	case "login":
 		$username = $_POST['username'];
 		$password = $_POST['password'];
-		$login = new user("connect.ini");
+		$login = new user("inc/connect.ini");
 		$response = $login->login_user($username, $password);
 		if ($response['success'])
 		{
 			$response = "<p>Login Successful!";
+			header("Location: login.html");
 		}
 		else		
 		{
-			$response = "<p>Login Failed...";
+			$response = "<p>Login Failed: ".$response['message'];
+			header("Location: index.html");
 		}
 		break;
 	case "upload":
-		$file = new file("connect.ini");
+		$file = new file("inc/connect.ini");
 		$response = $file->file_upload();
 		if ($response['success'])
 		{
@@ -53,7 +56,7 @@ switch($request)
 		break;
 	case "search":
 		$param = $_POST['param'];
-		$file = new file("connect.ini");
+		$file = new file("inc/connect.ini");
 		$response = $file->file_search($param);
 		if ($response['success'])
 		{
@@ -65,11 +68,11 @@ switch($request)
 		}
 		break;
 	case "browse":
-		$file = new file("connect.ini");
+		$file = new file("inc/connect.ini");
 		$response = $file->file_browse();
 		break;
 	case "scan":
-		$file = new file("connect.ini");
+		$file = new file("inc/connect.ini");
 		$response = $file->file_scan();
 		if ($response['success'])
 		{
