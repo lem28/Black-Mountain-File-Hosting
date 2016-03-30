@@ -108,9 +108,11 @@ class user
 		$user = $result->fetch_assoc();
 		if ($user['user_pw'] == $this->salt_password($password))
 		{
-			return array(
-				"success" => true
-			);
+			{
+				return array(
+					"success" => true
+				);
+			}
 		}
 		return array(
 			"success" => false,
