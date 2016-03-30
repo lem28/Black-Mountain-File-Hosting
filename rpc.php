@@ -24,7 +24,6 @@ switch($request)
 			$login->add_new_user($username,$password,$first_name,$last_name,$email);
 			$response = "<p> $username Registered Successfully!";
 		}
-		header("Location: index.html");
 		break;
 	case "login":
 		$username = $_POST['username'];
@@ -34,12 +33,10 @@ switch($request)
 		if ($response['success'])
 		{
 			$response = "<p>Login Successful!";
-			header("Location: login.html");
 		}
 		else		
 		{
 			$response = "<p>Login Failed: ".$response['message'];
-			header("Location: index.html");
 		}
 		break;
 	case "upload":
