@@ -78,7 +78,7 @@ class user
 	{
 		$query   = "select user_login from users where user_login = '$user_login';";
 		$result = $this->db->query($query);
-		if($this->db->fetch_array($result) == true)
+		if($result->fetch_array() == true)
 		{
 			return true;
 		}
