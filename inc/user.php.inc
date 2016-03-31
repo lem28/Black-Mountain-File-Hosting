@@ -96,7 +96,7 @@ class user
 				"message" => "user does not exist"
 			);
 		}
-		$query   = "select user_login from users where user_login = '$user_login';";
+		$query   = "select * from users where user_login = '$user_login';";
 		$result = $this->db->query($query);
 		if (!$result)
 		{
