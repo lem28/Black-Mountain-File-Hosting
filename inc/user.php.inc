@@ -26,50 +26,6 @@ class user
 	{
 		$this->db->close();
 	}
-	public function add_new_user($user_login, $password, $first_name, $last_name, $email)
-	{
-		if ($this->get_user_login($user_login) != 0)
-		{
-			$this->logger->log("user $user_login already exists!");
-			$response = array(
-				"message" => "user $user_login already exists!",
-				"success" => false
-			);
-			return $response;
-		}
-		$now = date("Y-m-d h:i:s", time());
-		$user_login = $this->db->real_escape_string($user_login);
-		$password = $this->salt_password($password);
-		$query = "
-			insert into users
-			(
-				user_login,
-				user_pw,
-				user_first_name,
-				user_last_name,
-				user_email,
-				first_login,
-				last_login
-			)
-			values
-			(
-				'$user_login',
-				'$password',
-				'$first_name',
-				'$last_name',
-				'$email',
-				'$now',
-				'$now'
-			);";
-		$result   = $this->db->query($query);
-		if (!$result)
-		{
-			$this->logger->log("error: ".$this->db->error);
-		}
-		return array(
-			"success" => true
-		);
-	}
 	private function salt_password($password)
 	{
 		return $this->db->real_escape_string(sha1($password.$this->salt));
@@ -117,6 +73,50 @@ class user
 		return array(
 			"success" => false,
 			"message" => "failed to match password"
+		);
+	}
+	public function add_new_user($user_login, $password, $first_name, $last_name, $email)
+	{
+		if ($this->get_user_login($user_login) != 0)
+		{
+			$this->logger->log("user $user_login already exists!");
+			$response = array(
+				"message" => "user $user_login already exists!",
+				"success" => false
+			);
+			return $response;
+		}
+		$now = date("Y-m-d h:i:s", time());
+		$user_login = $this->db->real_escape_string($user_login);
+		$password = $this->salt_password($password);
+		$query = "
+			insert into users
+			(
+				user_login,
+				user_pw,
+				user_first_name,
+				user_last_name,
+				user_email,
+				first_login,
+				last_login
+			)
+			values
+			(
+				'$user_login',
+				'$password',
+				'$first_name',
+				'$last_name',
+				'$email',
+				'$now',
+				'$now'
+			);";
+		$result   = $this->db->query($query);
+		if (!$result)
+		{
+			$this->logger->log("error: ".$this->db->error);
+		}
+		return array(
+			"success" => true
 		);
 	}
 }
