@@ -32,20 +32,18 @@ class user
 	}
 	public function get_user_login($user_login)
 	{
-		$query   = "select user_login from users where user_login = '$user_login';";
+		$query   = "select user_login from users where user_login='$user_login';";
 		$result = $this->db->query($query);
-		if($result->fetch_array() == true)
+	        $user = $result->fetch_assoc();
+		if (isset($user['user_login']))
 		{
-			return true;
+		    return $user['user_login'];
 		}
-		else
-		{
-			return false;
-		}
+		return 0;
 	}
 	public function login_user($user_login, $password)
 	{
-		if (!$this->get_user_login($user_login))
+		if ($this->get_user_login($user_login) != 0)
 		{
 			return array(
 				"success" => false,
@@ -61,13 +59,12 @@ class user
 				"message" => "db failure"
 			);
 		}
+		$salt_pw = $this->salt_password($password);
 		$user = $result->fetch_assoc();
-		if ($user['user_pw'] == $this->salt_password($password))
+		if ($user['user_pw'] == $salt_pw)
 		{
 			{
-				return array(
-					"success" => true
-				);
+				return array("success" => true);
 			}
 		}
 		return array(
