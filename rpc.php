@@ -33,7 +33,7 @@ switch($request)
 		if ($response['success'])
 		{
 			$response = "<p>Login Successful!";
-			echo '<a href="localhost/login.html">Click here to upload your file(s)<a>';
+			echo '<a href="login.html">Click here to upload your file(s)<a>';
 		}
 		else		
 		{
