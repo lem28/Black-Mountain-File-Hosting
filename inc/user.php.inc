@@ -61,11 +61,9 @@ class user
 		}
 		$salt_pw = $this->salt_password($password);
 		$user = $result->fetch_assoc();
-		if ($user['user_pw'] == $salt_pw)
+		if (isset($user['user_pw']) && $user['user_pw'] == $salt_pw)
 		{
-			{
 				return array("success" => true);
-			}
 		}
 		return array(
 			"success" => false,
